@@ -230,18 +230,52 @@ esi_dta = read_dta('https://www.ine.gob.cl/docs/default-source/encuesta-suplemen
 ```
 
 
-SPSS (archivos .sav)
+SPSS (archivos .sav):
 
 ```r
 esi_sav = read_sav('https://www.ine.gob.cl/docs/default-source/encuesta-suplementaria-de-ingresos/bbdd/spss_esi/2021/esi-2021---personas.sav?sfvrsn=1d2ec611_4&amp;download=true')
 ```
 
-SAS (archivos .sas7bdat)
+SAS (archivos .sas7bdat):
+
+```r
+tabla_sas = read_sas('data/airline.sas7bdat')
+```
+---
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Importación de datos
+
+## Haven
+
+Este paquete permite principalmente la carga de tablas de datos provenientes de otros
+softwares estadísticos. En particular:
+
+Stata (archivos .dta):
+
+
+```r
+library(haven)
+*esi_dta = read_dta('https://www.ine.gob.cl/docs/default-source/encuesta-suplementaria-de-ingresos/bbdd/stata_esi/2021/esi-2021---personas.dta?sfvrsn=b04b324c_4&amp;download=true')
+```
+
+
+SPSS (archivos .sav):
+
+```r
+*esi_sav = read_sav('https://www.ine.gob.cl/docs/default-source/encuesta-suplementaria-de-ingresos/bbdd/spss_esi/2021/esi-2021---personas.sav?sfvrsn=1d2ec611_4&amp;download=true')
+```
+
+SAS (archivos .sas7bdat):
 
 ```r
 tabla_sas = read_sas('data/airline.sas7bdat')
 ```
 
+
+.right[**Noten que también es posible cargar tablas de datos desde una URL en vez de un archivo en nuestro directorio de trabajo!**]
 ---
 background-image: url("imagenes/fondo2.PNG")
 background-size: contain;
@@ -252,6 +286,28 @@ background-position: 100% 0%
 ## feather y load()
 El paquete feather y el comando load() de R base permiten la carga eficiente de
 tablas de datos que se encuentren en los formatos que soportan (.feather el primero y .rds y .Rdata el último). 
+
+
+feather:
+
+```r
+library(feather)
+tabla_feather = read_feather('data/tabla_feather.feather')
+```
+
+
+Objetos de R (.rds):
+
+```r
+copia_tabla_sas = read_rds('data/tabla_sas.rds')
+```
+
+Múltiples objetos de R (.Rdata):
+
+```r
+load('data/conjunto_tablas.Rdata')
+```
+
 
 
 ---
