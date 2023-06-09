@@ -305,16 +305,6 @@ load('data/conjunto_tablas.Rdata')
 
 ---
 
-background-image: url("imagenes/fondo2.PNG")
-background-size: contain;
-background-position: 100% 0%
-
-# Importación de datos
-
-
-
----
-
 class: center, middle
 
 .linea-superior[]
