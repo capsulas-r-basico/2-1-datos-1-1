@@ -4,8 +4,8 @@
     <title>R and databases</title>
     <meta charset="utf-8" />
     <meta name="author" content="" />
-    <meta name="date" content="2023-06-05" />
-    <script src="visualizacion-1_files/header-attrs-2.21/header-attrs.js"></script>
+    <meta name="date" content="2023-06-09" />
+    <script src="datos-1-1_files/header-attrs-2.22/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -30,7 +30,6 @@ class: center, middle
 
 
 
-
 ---
 
 
@@ -38,7 +37,278 @@ background-image: url("imagenes/fondo2.PNG")
 background-size: contain;
 background-position: 100% 0%
 
-# EJEMPLO
+# Importación de datos
+
+Queremos traer a R datos que muchas veces provienen de fuentes externas:
+
+--
+
+  - De softwares ofimáticos: Excel, csv.
+
+--
+
+  - De softwares estadísticos: Stata, SPSS, SAS.
+
+--
+  - En formatos más específicos: .Rdata, .rds, .feather.
+  
+
+  
+--
+
+Veremos alternativas para importar cada uno de estos tipos de archivos.
+
+
+
+  &lt;p align="center"&gt;
+  &lt;img src="imagenes/logo_readxl.png" style="width:20%; margin-right:20px;"  /&gt;
+  &lt;img src="imagenes/logo_readr.png"style="width:20%; margin-right:20px;" /&gt; 
+  &lt;img src="imagenes/logo_haven.png"style="width:20%; margin-right:20px;" /&gt; 
+  &lt;img src="imagenes/feather2.png" style="width:25%;" /&gt;
+&lt;/p&gt;
+
+---
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Importación de datos
+
+## readxl
+
+Tablas excel:
+--
+
+```r
+library(readxl)
+
+
+tabla_excel &lt;- read_excel(path = "data/paises.xlsx")
+```
+--
+
+|País    |Capital  |
+|:-------|:--------|
+|Chile   |Santiago |
+|Perú    |Lima     |
+|Bolivia |La Paz   |
+---
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Importación de datos
+
+## readr I
+
+Tablas csv:
+--
+
+```r
+library(readr)
+
+
+tabla_csv &lt;- read_csv(file = "data/hospital.csv")
+```
+--
+
+| Number|City   |Gender | Age| Income|Illness |
+|------:|:------|:------|---:|------:|:-------|
+|      1|Dallas |Male   |  41|  40367|No      |
+|      2|Dallas |Male   |  54|  45084|No      |
+|      3|Dallas |Male   |  42|  52483|No      |
+|      4|Dallas |Male   |  40|  40941|No      |
+|      5|Dallas |Male   |  46|  50289|No      |
+
+---
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Importación de datos
+
+## readr II
+
+Tablas delimitadas por otro caracter:
+--
+
+```r
+tabla_delim &lt;- read_delim(file = "data/tabla_delim.txt")
+```
+--
+
+|nombre   |%         |apellido  |
+|:--------|:---------|:---------|
+|carlos   |arturo    |% lehmann |
+|jonathan |alejandro |% pizarro |
+|camila   |amaranta  |% agloni  |
+|felipe   |gabriel   |% concha  |
+
+¿Qué pasó?
+
+--
+
+.center[&lt;img src="imagenes/consola1.png" width="70%" /&gt;]
+
+
+
+---
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Importación de datos
+
+## readr II
+
+Tablas delimitadas por otro caracter:
+
+
+```r
+tabla_delim &lt;- read_delim(file = "data/tabla_delim.txt")
+```
+
+
+|nombre   |%         |apellido  |
+|:--------|:---------|:---------|
+|carlos   |arturo    |% lehmann |
+|jonathan |alejandro |% pizarro |
+|camila   |amaranta  |% agloni  |
+|felipe   |gabriel   |% concha  |
+
+¿Qué pasó?
+
+
+
+.center[&lt;img src="imagenes/tabla_delim.png" width="30%" /&gt;]
+
+
+
+
+---
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Importación de datos
+
+## readr II
+
+Tablas delimitadas por otro caracter:
+
+```r
+*tabla_delim &lt;- read_delim(file = "data/tabla_delim.txt", delim = '%')
+```
+--
+
+
+|nombre             | apellido |
+|:------------------|:---------|
+|carlos arturo      |lehmann   |
+|jonathan alejandro |pizarro   |
+|camila amaranta    |agloni    |
+|felipe gabriel     |concha    |
+  
+---
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Importación de datos
+
+## Haven
+
+Este paquete permite principalmente la carga de tablas de datos provenientes de otros
+softwares estadísticos. En particular:
+
+Stata (archivos .dta):
+
+
+```r
+library(haven)
+esi_dta = read_dta('https://www.ine.gob.cl/docs/default-source/encuesta-suplementaria-de-ingresos/bbdd/stata_esi/2021/esi-2021---personas.dta?sfvrsn=b04b324c_4&amp;download=true')
+```
+
+
+SPSS (archivos .sav):
+
+```r
+esi_sav = read_sav('https://www.ine.gob.cl/docs/default-source/encuesta-suplementaria-de-ingresos/bbdd/spss_esi/2021/esi-2021---personas.sav?sfvrsn=1d2ec611_4&amp;download=true')
+```
+
+SAS (archivos .sas7bdat):
+
+```r
+tabla_sas = read_sas('data/airline.sas7bdat')
+```
+---
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Importación de datos
+
+## Haven
+
+Este paquete permite principalmente la carga de tablas de datos provenientes de otros
+softwares estadísticos. En particular:
+
+Stata (archivos .dta):
+
+
+```r
+library(haven)
+*esi_dta = read_dta('https://www.ine.gob.cl/docs/default-source/encuesta-suplementaria-de-ingresos/bbdd/stata_esi/2021/esi-2021---personas.dta?sfvrsn=b04b324c_4&amp;download=true')
+```
+
+
+SPSS (archivos .sav):
+
+```r
+*esi_sav = read_sav('https://www.ine.gob.cl/docs/default-source/encuesta-suplementaria-de-ingresos/bbdd/spss_esi/2021/esi-2021---personas.sav?sfvrsn=1d2ec611_4&amp;download=true')
+```
+
+SAS (archivos .sas7bdat):
+
+```r
+tabla_sas = read_sas('data/airline.sas7bdat')
+```
+
+
+.right[**Noten que también es posible cargar tablas de datos desde una URL en vez de un archivo en nuestro directorio de trabajo!**]
+---
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Importación de datos
+
+## feather y load()
+El paquete feather y el comando load() de R base permiten la carga eficiente de
+tablas de datos que se encuentren en los formatos que soportan (.feather el primero y .rds y .Rdata el último). 
+
+
+feather:
+
+```r
+library(feather)
+tabla_feather = read_feather('data/tabla_feather.feather')
+```
+
+
+Objetos de R (.rds):
+
+```r
+copia_tabla_sas = read_rds('data/tabla_sas.rds')
+```
+
+Múltiples objetos de R (.Rdata):
+
+```r
+load('data/conjunto_tablas.Rdata')
+```
+
+
 
 ---
 
