@@ -26,7 +26,9 @@ class: center, middle
 
 ## Proyecto Ciencia de Datos
 
-### Mayo 2023
+## Importación de datos
+
+
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = TRUE)
@@ -269,7 +271,7 @@ tabla_sas = read_sas('data/airline.sas7bdat')
 ```
 
 
-.right[**Noten que también es posible cargar tablas de datos desde una URL en vez de un archivo en nuestro directorio de trabajo!**]
+.right[**¡Noten que también es posible cargar tablas de datos desde una URL en vez de un archivo en nuestro directorio de trabajo!**]
 ---
 background-image: url("imagenes/fondo2.PNG")
 background-size: contain;
@@ -317,4 +319,6 @@ class: center, middle
 
 ## Proyecto Ciencia de Datos
 
-### Mayo 2023
+## Importación de datos
+
+
