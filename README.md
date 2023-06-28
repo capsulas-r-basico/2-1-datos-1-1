@@ -1,2 +1,2 @@
-# 2-0-datos-1-0
-clase 0 de datos
+# datos-1-1
+primera cápsula de la sección datos I

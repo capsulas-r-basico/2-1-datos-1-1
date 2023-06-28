@@ -4,8 +4,8 @@
     <title>R and databases</title>
     <meta charset="utf-8" />
     <meta name="author" content="" />
-    <meta name="date" content="2023-06-28" />
-    <script src="datos-1-0_files/header-attrs-2.22/header-attrs.js"></script>
+    <meta name="date" content="2023-06-22" />
+    <script src="datos-1-1_files/header-attrs-2.22/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -13,7 +13,6 @@
 
 
 class: center, middle
-name: portada
 
 .linea-superior[]
 .linea-inferior[]
@@ -24,7 +23,8 @@ name: portada
 
 ## Proyecto Ciencia de Datos
 
-## Directorio de trabajo y proyectos 
+## Importación de datos
+
 
 
 
@@ -34,164 +34,301 @@ name: portada
 
 ---
 
-name: diapo-basica
+
 background-image: url("imagenes/fondo2.PNG")
 background-size: contain;
 background-position: 100% 0%
 
-# Directorio de trabajo y proyectos
----
+# Importación de datos
 
-template: diapo-basica
-
-## list.files y rutas absolutas
-
-Cuando trabajamos en R, muchas veces lo haremos con archivos de nuestro computador.
-
+Queremos traer a R datos que muchas veces provienen de fuentes externas:
 
 --
 
-Si queremos ver los archivos de un directorio particular, podemos usar
-`list.files(ruta_directorio)`, donde `ruta_directorio` es un string que representa
-el directorio, por ejemplo:
-
-
-```r
-list.files('C:/Users/Jeconchao/Desktop/Repos/datos-1-1/data')
-```
-
-```
-## [1] "airline.sas7bdat"      "conjunto_tablas.Rdata" "datos_sav.rds"        
-## [4] "hospital.csv"          "paises.xlsx"           "tabla_delim.txt"      
-## [7] "tabla_sas.rds"
-```
---
-
-Esto es una ruta absoluta, pues parte desde el disco (`C:/`) y tiene dos problemas:
+  - De softwares ofimáticos: Excel, csv.
 
 --
 
-1. Hace referencia a carpetas de un usuario particular
+  - De softwares estadísticos: Stata, SPSS, SAS.
 
 --
+  - En formatos más específicos: .Rdata, .rds, .feather.
+  
 
-2. Es largo y engorroso de escribir
+  
+--
+
+Veremos alternativas para importar cada uno de estos tipos de archivos.
+
+
+
+  &lt;p align="center"&gt;
+  &lt;img src="imagenes/logo_readxl.png" style="width:20%; margin-right:20px;"  /&gt;
+  &lt;img src="imagenes/logo_readr.png"style="width:20%; margin-right:20px;" /&gt; 
+  &lt;img src="imagenes/logo_haven.png"style="width:20%; margin-right:20px;" /&gt; 
+  &lt;img src="imagenes/feather2.png" style="width:25%;" /&gt;
+&lt;/p&gt;
 
 ---
-template:diapo-basica
-## list.files y rutas relativas
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
 
-También podemos usar `list.files()` sin un argumento, lo que mostrará los archivos de la carpeta en que R se encuentra actualmente (directorio de trabajo):
+# Importación de datos
 
+## readxl
+
+Tablas excel:
 --
 
-
 ```r
-list.files()
-```
+library(readxl)
 
-```
-## [1] "2-0-datos-1-0.Rproj" "data"                "datos-1-0.html"     
-## [4] "datos-1-0.Rmd"       "datos-1-0_files"     "imagenes"           
-## [7] "index.html"          "README.md"           "xaringan-themer.css"
+
+tabla_excel &lt;- read_excel(path = "data/paises.xlsx")
 ```
 --
 
-Podemos chequear en qué carpeta nos encontramos con:
-
-
-```r
-getwd()
-```
-
-```
-## [1] "C:/Users/Jeconchao/Desktop/Repos/2-0-datos-1-0"
-```
-
-Lo interesante es que si, por ejemplo, queremos entrar a la carpeta `data`, no es
-necesario escribir la ruta completa, sino que basta con partir desde el directorio
-de trabajo actual:
-
-
-```r
-list.files('data/')
-```
-
-```
-## [1] "airline.sas7bdat"      "conjunto_tablas.Rdata" "datos_sav.rds"        
-## [4] "hospital.csv"          "paises.xlsx"           "tabla_delim.txt"      
-## [7] "tabla_sas.rds"
-```
+|País    |Capital  |
+|:-------|:--------|
+|Chile   |Santiago |
+|Perú    |Lima     |
+|Bolivia |La Paz   |
 ---
-template:diapo-basica
-## list.files y rutas relativas
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
 
-A esto le llamamos ruta relativa, pues no parte desde el disco, sino que desde nuestro
-directorio de trabajo actual.
+# Importación de datos
 
+## readr I
+
+Tablas csv:
 --
 
-Si queremos cambiar nuestro directorio de trabajo podemos utilizar `setwd(ruta)`,
-por ejemplo:
+```r
+library(readr)
 
+
+tabla_csv &lt;- read_csv(file = "data/hospital.csv")
+```
 --
 
-
-```r
-setwd('C:/Users/Jeconchao/Documents')
-getwd()
-```
-
-```
-## [1] "C:/Users/Jeconchao/Documents"
-```
-
-```r
-list.files('data/')
-```
-
-```
-## character(0)
-```
+| Number|City   |Gender | Age| Income|Illness |
+|------:|:------|:------|---:|------:|:-------|
+|      1|Dallas |Male   |  41|  40367|No      |
+|      2|Dallas |Male   |  54|  45084|No      |
+|      3|Dallas |Male   |  42|  52483|No      |
+|      4|Dallas |Male   |  40|  40941|No      |
+|      5|Dallas |Male   |  46|  50289|No      |
 
 ---
-template:diapo-basica
-## Uso de proyectos
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
 
-Con lo anterior logramos evitar utilizar rutas absolutas constantemente. 
+# Importación de datos
+
+## readr II
+
+Tablas delimitadas por otro caracter:
+--
+
+```r
+tabla_delim &lt;- read_delim(file = "data/tabla_delim.txt")
+```
+--
+
+|nombre   |%         |apellido  |
+|:--------|:---------|:---------|
+|carlos   |arturo    |% lehmann |
+|jonathan |alejandro |% pizarro |
+|camila   |amaranta  |% agloni  |
+|felipe   |gabriel   |% concha  |
+
+¿Qué pasó?
 
 --
 
-Sin embargo, el uso de `setwd()` nos obliga a usar una ruta absoluta al menos una vez, lo que hace que nuestro código no pueda correr directamente desde cualquier otra carpeta.
-
---
-
-Para evitar esto, utilizamos los `proyectos` de `RStudio`. 
-
---
-
-Básicamente crean un archivo que le dice a R que el directorio de trabajo es donde
-se aloja el proyecto.
-
---
-
-Demostraremos en vivo la creación de un proyecto:
-
-
----
-template:diapo-basica
-
-## Resumen creación de proyectos:
-
-.center[&lt;img src="imagenes/proyectos.png" width="100%" /&gt;]
+.center[&lt;img src="imagenes/consola1.png" width="70%" /&gt;]
 
 
 
 ---
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Importación de datos
+
+## readr II
+
+Tablas delimitadas por otro caracter:
+
+
+```r
+tabla_delim &lt;- read_delim(file = "data/tabla_delim.txt")
+```
+
+
+|nombre   |%         |apellido  |
+|:--------|:---------|:---------|
+|carlos   |arturo    |% lehmann |
+|jonathan |alejandro |% pizarro |
+|camila   |amaranta  |% agloni  |
+|felipe   |gabriel   |% concha  |
+
+¿Qué pasó?
 
 
 
-template: portada
+.center[&lt;img src="imagenes/tabla_delim.png" width="30%" /&gt;]
+
+
+
+
+---
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Importación de datos
+
+## readr II
+
+Tablas delimitadas por otro caracter:
+
+```r
+*tabla_delim &lt;- read_delim(file = "data/tabla_delim.txt", delim = '%')
+```
+--
+
+
+|nombre             | apellido |
+|:------------------|:---------|
+|carlos arturo      |lehmann   |
+|jonathan alejandro |pizarro   |
+|camila amaranta    |agloni    |
+|felipe gabriel     |concha    |
+  
+---
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Importación de datos
+
+## Haven
+
+Este paquete permite principalmente la carga de tablas de datos provenientes de otros
+softwares estadísticos. En particular:
+
+Stata (archivos .dta):
+
+
+```r
+library(haven)
+esi_dta = read_dta('https://www.ine.gob.cl/docs/default-source/encuesta-suplementaria-de-ingresos/bbdd/stata_esi/2021/esi-2021---personas.dta?sfvrsn=b04b324c_4&amp;download=true')
+```
+
+
+SPSS (archivos .sav):
+
+```r
+esi_sav = read_sav('https://www.ine.gob.cl/docs/default-source/encuesta-suplementaria-de-ingresos/bbdd/spss_esi/2021/esi-2021---personas.sav?sfvrsn=1d2ec611_4&amp;download=true')
+```
+
+SAS (archivos .sas7bdat):
+
+```r
+tabla_sas = read_sas('data/airline.sas7bdat')
+```
+---
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Importación de datos
+
+## Haven
+
+Este paquete permite principalmente la carga de tablas de datos provenientes de otros
+softwares estadísticos. En particular:
+
+Stata (archivos .dta):
+
+
+```r
+library(haven)
+*esi_dta = read_dta('https://www.ine.gob.cl/docs/default-source/encuesta-suplementaria-de-ingresos/bbdd/stata_esi/2021/esi-2021---personas.dta?sfvrsn=b04b324c_4&amp;download=true')
+```
+
+
+SPSS (archivos .sav):
+
+```r
+*esi_sav = read_sav('https://www.ine.gob.cl/docs/default-source/encuesta-suplementaria-de-ingresos/bbdd/spss_esi/2021/esi-2021---personas.sav?sfvrsn=1d2ec611_4&amp;download=true')
+```
+
+SAS (archivos .sas7bdat):
+
+```r
+tabla_sas = read_sas('data/airline.sas7bdat')
+```
+
+
+.right[**¡Noten que también es posible cargar tablas de datos desde una URL en vez de un archivo en nuestro directorio de trabajo!**]
+---
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Importación de datos
+
+## feather y load()
+El paquete feather y el comando load() de R base permiten la carga eficiente de
+tablas de datos que se encuentren en los formatos que soportan (.feather el primero y .rds y .Rdata el último). 
+
+
+feather:
+
+```r
+library(feather)
+tabla_feather = read_feather('data/tabla_feather.feather')
+```
+
+
+Objetos de R (.rds):
+
+```r
+copia_tabla_sas = read_rds('data/tabla_sas.rds')
+```
+
+Múltiples objetos de R (.Rdata):
+
+```r
+load('data/conjunto_tablas.Rdata')
+```
+
+
+
+---
+
+class: center, middle
+
+.linea-superior[]
+.linea-inferior[]
+
+&lt;img src="imagenes/logo_portada2.png" width="200" /&gt;
+
+
+## INE Educa: Clases abiertas de R
+
+## Proyecto Ciencia de Datos
+
+## Importación de datos
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
